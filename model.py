@@ -8,20 +8,22 @@ class ConnectFourModel():
     board, check for winners, set player scores, and notify observers.
     """
 
-    def __init__(self) -> None:
-        # Define 6 (height) by 7 (width) array
+    def __init__(self):
         """
+        Initializes the model. The observers is set to empty, scores are set to 0 (red)
+        vs 0 (black), and an empty board is created. For the representation of the
+        board array and its conventions, see documentation for `create_empty_board()`.
         """
         self.observers = []
         self.scores = [0,0]
         self.clear_board()
-        pass
+        return
 
     def get_board(self):
         """
+        Returns the board
         """
-        #return self.
-        pass
+        return self.board
 
     def clear_board(self):
         """
@@ -51,13 +53,20 @@ class ConnectFourModel():
             board[i] = ["e"]*7
         return board;
 
-    def place_piece(self, x, color):
+    def place_piece(self, col, color):
+        """
+        Places a piece given its color and column. Column zero is the leftmost column.
+        """
+        # TODO
+        self.notify_observers()
         pass
 
     def has_won(self):
         """
-        Returns 'r' if red has won, 'b' if black has won, NULL otherwise
+        Returns 'r' if red has won, 'b' if black has won, NULL otherwise.
         """
+        # TODO
+        # Search through entire array looking for four in a row of either color
         pass
 
     def get_scores(self):
@@ -66,18 +75,23 @@ class ConnectFourModel():
         """
         return self.scores
 
-    def set_scores(self):
-        pass
+    def set_scores(self, red_score, black_score):
+        """
+        Sets the scores for the red and black player
+        """
+        self.scores = [red_score, black_score]
 
     def set_observer(self, observer):
         """
-        Adds an observer to the list of observers for this model. Assumes an update() method.
+        Adds an observer to the list of observers for this model. Assumes an
+        update() method.
         """
         self.observers.append(observer)
 
     def notify_observers(self):
         """
-        Notifies all observers of this model. Assumes that each observer has an update() method.
+        Notifies all observers of this model. Assumes that each observer has
+        an update() method.
         """
         for ob in self.observers:
             ob.update()
