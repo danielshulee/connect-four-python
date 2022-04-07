@@ -21,7 +21,7 @@ class ConnectFourModel():
 
     def get_board(self):
         """
-        Returns the board
+        Returns the board.
         """
         return self.board
 
@@ -55,11 +55,17 @@ class ConnectFourModel():
 
     def place_piece(self, col, color):
         """
-        Places a piece given its color and column. Column zero is the leftmost column.
+        Places a piece given its color ('r' or 'b'), errors out otherwise )and column.
+        Column zero is the leftmost column.
         """
-        # TODO
+        if color != 'r' and color != 'b':
+            assert False
+
+        # TODO: implement "gravity"
+
+        
         self.notify_observers()
-        pass
+        return
 
     def has_won(self):
         """
