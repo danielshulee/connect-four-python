@@ -69,7 +69,7 @@ class ConnectFourModel():
 
         # Finds the lowest possible row a piece can be placed
         row = 0
-        for i in range(self.height-1, 0, -1):
+        for i in range(self.height-1, -1, -1):
             if (self.board[i][col] == 'e'):
                 self.board[i][col] = color
                 row = i
