@@ -47,8 +47,8 @@ class GameBoardView(tk.Frame):
     redScoreLabel = Label(scoreboardFrame, text = "0", fg = 'red', font = 'times 80');
     redScoreLabel.grid(row = scoreLabelsRow, column = 0);
     
-    yellowScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'times 80');
-    yellowScoreLabel.grid(row = scoreLabelsRow, column = 1);
+    blackScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'times 80');
+    blackScoreLabel.grid(row = scoreLabelsRow, column = 1);
     
     
     
@@ -174,6 +174,13 @@ class GameBoardView(tk.Frame):
                 
                 self.gameCanvas.create_oval(xCoord - self.circleSize,yCoord -self.circleSize, xCoord +self.circleSize, yCoord +self.circleSize, outline = "#000", fill = color, width = 2);
                 
+        
+        
+        scores = self.controller.get_scores();
+        
+        self.redScoreLabel.config(text = scores[0]);
+        self.blackScoreLabel.config(text = scores[1]);
+        
         pass
     
     
