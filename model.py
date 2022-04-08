@@ -2,6 +2,9 @@
 Creates a ConnectFourModel class which represents the underlying connect four board
 """
 
+from asyncio.windows_events import NULL
+
+
 class ConnectFourModel():
     """
     Model that represents connect four board. Contains methods to places pieces, clear
@@ -16,6 +19,8 @@ class ConnectFourModel():
         """
         self.observers = []
         self.scores = [0,0]
+        self.height = 6
+        self.width = 7
         self.clear_board()
         return
 
@@ -49,31 +54,151 @@ class ConnectFourModel():
         for red, and "e" for empty.
         """
         board = []
-        for i in range(6):
-            board[i] = ["e"]*7
-        return board;
+        for i in range(self.height):
+            board[i] = ["e"]*self.width
+        return board
 
     def place_piece(self, col, color):
         """
         Places a piece given its color ('r' or 'b'), errors out otherwise )and column.
         Column zero is the leftmost column.
+        Returns r if red won or b if black won or NULL if neither player has won from the move.
         """
         if color != 'r' and color != 'b':
             assert False
 
-        # TODO: implement "gravity"
-
+        # Finds the lowest possible row a piece can be placed
+        row = 0
+        for i in range(self.height-1, 0, -1):
+            if (self.board[i][col] == 'e'):
+                self.board[i][col] = color
+                row = i
+                break
         
+        # Winner has to be called before notify_observers, so that
+        # score is updated before the observers are notified.
+        winner = self.has_won(self, row, col)
         self.notify_observers()
-        return
+        return winner
 
-    def has_won(self):
+    def has_won(self, row, col):
         """
+        Checks if the piece placed at self.board[row][col] causes a player to win.
+        If a player has won then the score is also updated.
         Returns 'r' if red has won, 'b' if black has won, NULL otherwise.
         """
-        # TODO
-        # Search through entire array looking for four in a row of either color
-        pass
+        piece = self.board[row][col]
+        pieces_amt = 1
+
+        # Checks straights
+        for i in range(1, 4):
+            # Counts amount of pieces to the left of the placed piece
+            if (col-i > 0):
+                if (self.board[row][col-i] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        for i in range(1, 4):
+            # Counts amount of pieces to the right of the placed piece
+            if (col+i < self.width-1):
+                if (self.board[row][col+i] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        if (pieces_amt >= 4):
+            if piece == 'r':
+                self.scores[0] += 1
+            else:
+                self.scores[1] += 1
+            return piece
+        pieces_amt = 1
+
+        # Checks up and downs
+        for i in range(1, 4):
+            # Counts amount of pieces above the placed piece
+            if (row-i > 0):
+                if (self.board[row-i][col] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        for i in range(1, 4):
+            # Counts amount of pieces below the placed piece
+            if (row+i < self.height-1):
+                if (self.board[row+i][col] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        if (pieces_amt >= 4):
+            if piece == 'r':
+                self.scores[0] += 1
+            else:
+                self.scores[1] += 1
+            return piece
+        pieces_amt = 1
+
+        # Checks diagonals that goes from up-left to down-right
+        for i in range(1, 4):
+            # Counts amount of pieces to the diagonal-up-left
+            if (row-i > 0 and col-i > 0):
+                if (self.board[row-i][col-i] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        for i in range(1, 4):
+            # Counts amount of pieces to the diagonal-down-right
+            if (row+i < self.height-1 and col+i < self.width-1):
+                if (self.board[row+i][col+i] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        if (pieces_amt >= 4):
+            if piece == 'r':
+                self.scores[0] += 1
+            else:
+                self.scores[1] += 1
+            return piece
+        pieces_amt = 1
+
+        # Checks diagonals that goes from up-right to down-left
+        for i in range(1, 4):
+            # Counts amount of pieces to the diagonal-up-right
+            if (row-i > 0 and col+i < self.width-1):
+                if (self.board[row-i][col+i] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        for i in range(1, 4):
+            # Counts amount of pieces to the diagonal-down-left
+            if (row+i < self.height-1 and col-i > 0):
+                if (self.board[row+i][col-i] == piece):
+                    pieces_amt += 1
+                else:
+                    break
+            else:
+                break
+        if (pieces_amt >= 4):
+            if piece == 'r':
+                self.scores[0] += 1
+            else:
+                self.scores[1] += 1
+            return piece
+        pieces_amt = 1
+                    
+        return NULL
 
     def get_scores(self):
         """
