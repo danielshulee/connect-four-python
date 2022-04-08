@@ -15,6 +15,8 @@ from model import ConnectFourModel
 
 class GameBoardView(tk.Frame):
     
+    playerTurn = 'r'
+    
     
     controller = 0;
     
@@ -27,7 +29,7 @@ class GameBoardView(tk.Frame):
     
     
     gameCanvas = Canvas(gameFrame, bg = 'blue', width  =580, height = 500);
-    gameCanvas.bind("<Button-1", canvasClick);
+    
     
     gameCanvas.grid(row = 0, column = 0);
     
@@ -36,8 +38,8 @@ class GameBoardView(tk.Frame):
     
     turnIndicatorRow = 0;
     
-    turnIndicatorLabel = Label(scoreboardFrame, text = "Red Player's\n Turn", fg = 'red', font = 'times 50');
-    turnIndicatorLabel.grid(row = turnIndicatorRow, column = 0, columnspan = 2);
+    turnIndicatorLabel = Label(scoreboardFrame, text = "Red Player's\n Turn", fg = 'red', font = 'times 50', width = 10);
+    turnIndicatorLabel.grid(row = turnIndicatorRow, column = 0, columnspan = 2, ipadx = 50);
     
     
     scoreLabelsRow = 1;
@@ -45,7 +47,7 @@ class GameBoardView(tk.Frame):
     redScoreLabel = Label(scoreboardFrame, text = "0", fg = 'red', font = 'times 80');
     redScoreLabel.grid(row = scoreLabelsRow, column = 0);
     
-    yellowScoreLabel = Label(scoreboardFrame, text = "0", fg = 'yellow', font = 'times 80');
+    yellowScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'times 80');
     yellowScoreLabel.grid(row = scoreLabelsRow, column = 1);
     
     
@@ -59,11 +61,14 @@ class GameBoardView(tk.Frame):
     
     def __init__(self, num_players):
         
-        self.controller = ConnectFourController(ConnectFourModel());
+        model = ConnectFourModel();
+        model.set_observer(self);
+        
+        self.controller = ConnectFourController(model);
         
         
         
-        
+        self.gameCanvas.bind("<Button-1>", self.place_piece);
         
         
         
@@ -86,7 +91,7 @@ class GameBoardView(tk.Frame):
         
         pass
 
-    def place_piece(self):
+    def place_piece(self, event):
         """
         Callback function responsible for placing a piece.
         """
@@ -96,7 +101,31 @@ class GameBoardView(tk.Frame):
         
         #if ai==true:
         #   controller.ai_move()
-
+        
+        
+        #gets the column the user clicked
+        columnClicked = (event.x - 20)//80;
+        
+        print(columnClicked);
+        
+        #make sure column selection is valid
+        if(columnClicked < 0 or columnClicked > 6):
+            return;
+        
+        #passes the move to the controller
+        self.controller.place_piece(columnClicked, self.playerTurn);
+        
+        if(self.playerTurn == 'r'):
+            self.playerTurn = 'b';
+            self.turnIndicatorLabel.config( text = "Black Player's\n Turn", fg = 'black');
+            
+        elif(self.playerTurn == 'b'):
+            self.playerTurn = 'r';
+            self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red');
+        
+        
+        
+        
         pass
 
     def reset_score(self):
@@ -130,39 +159,25 @@ class GameBoardView(tk.Frame):
                 #get the color
                 color = grid[x][y];
                 
-                if(color == "e"):
+                if(color == 'e'):
                     color = 'white';
-                elif(color =="r"):
+                elif(color =='r'):
                     color = 'red';
-                elif(color == "b"):
+                elif(color == 'b'):
                     color = 'black';
                 
                 
                 
                 #create circle of said color
-                xCoord  = x* 80 + 50;
-                yCoord = y*80 + 50;
+                xCoord  = y* 80 + 50;
+                yCoord = x*80 + 50;
                 
                 self.gameCanvas.create_oval(xCoord - self.circleSize,yCoord -self.circleSize, xCoord +self.circleSize, yCoord +self.circleSize, outline = "#000", fill = color, width = 2);
                 
         pass
     
     
-    def canvasClick(self, event):
-        """
-        """
-        #gets the column the user clicked
-        columnClicked = (event.x - 50)/80;
-        
-        #make sure column selection is valid
-        if(columnClicked < 0 or columnClicked > 6):
-            return;
-        
-        #passes the move to the controller
-        self.controller.place_piece(columnClicked, 'red');
-        
-        
-        pass
+  
     
     
 class MenuView(tk.Frame):

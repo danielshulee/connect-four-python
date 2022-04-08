@@ -77,7 +77,7 @@ class ConnectFourModel():
         
         # Winner has to be called before notify_observers, so that
         # score is updated before the observers are notified.
-        winner = self.has_won(self, row, col)
+        winner = self.has_won( row, col)
         self.notify_observers()
         return winner
 
