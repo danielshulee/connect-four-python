@@ -27,6 +27,8 @@ class GameBoardView(tk.Frame):
     
     
     gameCanvas = Canvas(gameFrame, bg = 'blue', width  =580, height = 500);
+    gameCanvas.bind("<Button-1", canvasClick);
+    
     gameCanvas.grid(row = 0, column = 0);
     
     scoreboardFrame = Frame(root);
