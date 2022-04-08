@@ -55,7 +55,7 @@ class ConnectFourModel():
         """
         board = []
         for i in range(self.height):
-            board[i] = ["e"]*self.width
+            board.append(["e"]*self.width)
         return board
 
     def place_piece(self, col, color):
