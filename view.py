@@ -8,7 +8,9 @@ from tkinter import Entry
 from tkinter import StringVar
 from tkinter import Checkbutton
 from tkinter import Frame
+from tkinter import messagebox
 
+from asyncio.windows_events import NULL
 
 from controller import ConnectFourController
 from model import ConnectFourModel
@@ -61,11 +63,11 @@ class GameBoardView(tk.Frame):
     
     def __init__(self, num_players):
         
-        model = ConnectFourModel();
-        model.set_observer(self);
+       # model = ConnectFourModel();
+        #model.set_observer(self);
         
-        self.controller = ConnectFourController(model);
-        
+        self.controller = ConnectFourController(ConnectFourModel());
+        self.controller.set_observer(self);
         
         
         self.gameCanvas.bind("<Button-1>", self.place_piece);
@@ -106,14 +108,22 @@ class GameBoardView(tk.Frame):
         #gets the column the user clicked
         columnClicked = (event.x - 20)//80;
         
-        print(columnClicked);
+        
         
         #make sure column selection is valid
         if(columnClicked < 0 or columnClicked > 6):
             return;
+        elif(self.controller.get_board()[0][columnClicked] != 'e'):
+            return;
+        
+        
         
         #passes the move to the controller
-        self.controller.place_piece(columnClicked, self.playerTurn);
+        if(self.controller.place_piece(columnClicked, self.playerTurn) != NULL):
+            messagebox.showinfo("Winner!", "A Player has won!")
+            self.controller.clear_board();
+            
+            
         
         if(self.playerTurn == 'r'):
             self.playerTurn = 'b';
