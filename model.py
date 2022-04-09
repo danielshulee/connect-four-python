@@ -93,7 +93,7 @@ class ConnectFourModel():
         # Checks straights
         for i in range(1, 4):
             # Counts amount of pieces to the left of the placed piece
-            if (col-i > 0):
+            if (col-i >= 0):
                 if (self.board[row][col-i] == piece):
                     pieces_amt += 1
                 else:
@@ -102,7 +102,7 @@ class ConnectFourModel():
                 break
         for i in range(1, 4):
             # Counts amount of pieces to the right of the placed piece
-            if (col+i < self.width-1):
+            if (col+i <= self.width-1):
                 if (self.board[row][col+i] == piece):
                     pieces_amt += 1
                 else:
@@ -120,7 +120,7 @@ class ConnectFourModel():
         # Checks up and downs
         for i in range(1, 4):
             # Counts amount of pieces above the placed piece
-            if (row-i > 0):
+            if (row-i >= 0):
                 if (self.board[row-i][col] == piece):
                     pieces_amt += 1
                 else:
@@ -129,7 +129,7 @@ class ConnectFourModel():
                 break
         for i in range(1, 4):
             # Counts amount of pieces below the placed piece
-            if (row+i < self.height-1):
+            if (row+i <= self.height-1):
                 if (self.board[row+i][col] == piece):
                     pieces_amt += 1
                 else:
@@ -147,7 +147,7 @@ class ConnectFourModel():
         # Checks diagonals that goes from up-left to down-right
         for i in range(1, 4):
             # Counts amount of pieces to the diagonal-up-left
-            if (row-i > 0 and col-i > 0):
+            if (row-i >= 0 and col-i >= 0):
                 if (self.board[row-i][col-i] == piece):
                     pieces_amt += 1
                 else:
@@ -156,7 +156,7 @@ class ConnectFourModel():
                 break
         for i in range(1, 4):
             # Counts amount of pieces to the diagonal-down-right
-            if (row+i < self.height-1 and col+i < self.width-1):
+            if (row+i <= self.height-1 and col+i <= self.width-1):
                 if (self.board[row+i][col+i] == piece):
                     pieces_amt += 1
                 else:
@@ -174,7 +174,7 @@ class ConnectFourModel():
         # Checks diagonals that goes from up-right to down-left
         for i in range(1, 4):
             # Counts amount of pieces to the diagonal-up-right
-            if (row-i > 0 and col+i < self.width-1):
+            if (row-i >= 0 and col+i <= self.width-1):
                 if (self.board[row-i][col+i] == piece):
                     pieces_amt += 1
                 else:
@@ -183,7 +183,7 @@ class ConnectFourModel():
                 break
         for i in range(1, 4):
             # Counts amount of pieces to the diagonal-down-left
-            if (row+i < self.height-1 and col-i > 0):
+            if (row+i <= self.height-1 and col-i >= 0):
                 if (self.board[row+i][col-i] == piece):
                     pieces_amt += 1
                 else:
