@@ -15,7 +15,14 @@ from asyncio.windows_events import NULL
 from controller import ConnectFourController
 from model import ConnectFourModel
 
+
+
+
+
 class GameBoardView(tk.Frame):
+    
+   
+    num_players = 2;
     
     playerTurn = 'r'
     
@@ -25,8 +32,11 @@ class GameBoardView(tk.Frame):
     root = Tk();
     root.title("Connect Four");
     
+    gameBoardFrame = Frame(root);
+    gameBoardFrame.grid(row = 0, column = 0);
     
-    gameFrame = Frame(root);
+    
+    gameFrame = Frame(gameBoardFrame);
     gameFrame.grid(row = 0, column = 0);
     
     
@@ -35,7 +45,7 @@ class GameBoardView(tk.Frame):
     
     gameCanvas.grid(row = 0, column = 0);
     
-    scoreboardFrame = Frame(root);
+    scoreboardFrame = Frame(gameBoardFrame);
     scoreboardFrame.grid(row =0, column = 1);
     
     turnIndicatorRow = 0;
@@ -55,13 +65,20 @@ class GameBoardView(tk.Frame):
     
     
     
-    returnToMenuButton = Button(scoreboardFrame, text = "Menu", font = 'times 40');
-    returnToMenuButton.grid(row = 2, column = 0, columnspan = 2);
+    
+    
+    
+    menuFrame = Frame(root);
+    menuLabel = Label(menuFrame, text = "Menu");
+    menuLabel.grid(row = 0, column = 0);
+    
+    
+    
     
     circleSize = 30;
     
     
-    def __init__(self, num_players):
+    def __init__(self):
         
        # model = ConnectFourModel();
         #model.set_observer(self);
@@ -86,7 +103,11 @@ class GameBoardView(tk.Frame):
         
         
         
+        returnToMenuButton = Button(self.scoreboardFrame, text = "Menu", font = 'times 40', command = self.quit_to_menu);
+        returnToMenuButton.grid(row = 2, column = 0, columnspan = 2);
         
+        startNewGameButton = Button(self.menuFrame, text = "Start New Game", command = self.start_game_from_menu);
+        startNewGameButton.grid(row = 1, column = 0);
         
         
         self.root.mainloop();
@@ -151,6 +172,9 @@ class GameBoardView(tk.Frame):
     def quit_to_menu(self):
         """
         """
+        self.gameBoardFrame.grid_forget();
+        self.menuFrame.grid(row =0, column = 0);
+        
         pass
 
     def update(self):
@@ -192,19 +216,24 @@ class GameBoardView(tk.Frame):
         self.blackScoreLabel.config(text = scores[1]);
         
         pass
-    
+
     
   
     
     
-class MenuView(tk.Frame):
 
-    def __init__(self):
-        pass
+    
+   
+    
+    
 
-    def start_game(self):
+    def start_game_from_menu(self):
         """
         """
+        
+        self.menuFrame.grid_forget();
+        self.gameBoardFrame.grid(row =0, column = 0);
+        
         pass
 
     def quit(self):
@@ -212,4 +241,4 @@ class MenuView(tk.Frame):
         """
         pass
     
-gameboard = GameBoardView(1);
+gameboard = GameBoardView();
