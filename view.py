@@ -72,8 +72,10 @@ class GameBoardView(tk.Frame):
     menuLabel = Label(menuFrame, text = "Menu");
     menuLabel.grid(row = 0, column = 0);
     
+    onePlayerCheckbutton = None;
+    twoPlayerCheckbutton = None;
     
-    
+    currentlyCheckedbutton = twoPlayerCheckbutton;
     
     circleSize = 30;
     
@@ -107,8 +109,15 @@ class GameBoardView(tk.Frame):
         returnToMenuButton.grid(row = 2, column = 0, columnspan = 2);
         
         startNewGameButton = Button(self.menuFrame, text = "Start New Game", command = self.start_game_from_menu);
-        startNewGameButton.grid(row = 1, column = 0);
+        startNewGameButton.grid(row = 3, column = 0);
         
+        self.onePlayerCheckbutton = Checkbutton(self.menuFrame, text = "1 Player", command = self.onePlayerCheck);
+        self.onePlayerCheckbutton.grid(row = 1, column = 0);
+        
+        self.twoPlayerCheckbutton = Checkbutton(self.menuFrame, text = "2 Player", command = self.twoPlayerCheck);
+        self.twoPlayerCheckbutton.grid(row = 2, column = 0);
+        
+        self.twoPlayerCheckbutton.select();
         
         self.root.mainloop();
         
@@ -144,17 +153,19 @@ class GameBoardView(tk.Frame):
             messagebox.showinfo("Winner!", "A Player has won!")
             self.controller.clear_board();
             
-            
+        if(self.num_players == 2):
         
-        if(self.playerTurn == 'r'):
-            self.playerTurn = 'b';
-            self.turnIndicatorLabel.config( text = "Black Player's\n Turn", fg = 'black');
-            
-        elif(self.playerTurn == 'b'):
-            self.playerTurn = 'r';
-            self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red');
+            if(self.playerTurn == 'r'):
+                self.playerTurn = 'b';
+                self.turnIndicatorLabel.config( text = "Black Player's\n Turn", fg = 'black');
+                
+            elif(self.playerTurn == 'b'):
+                self.playerTurn = 'r';
+                self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red');
         
-        
+        else:
+            self.controller.ai_move();
+            pass
         
         
         pass
@@ -219,20 +230,48 @@ class GameBoardView(tk.Frame):
 
     
   
-    
+    def onePlayerCheck(self):
+        
+        
+        if(self.currentlyCheckedbutton != self.onePlayerCheckbutton):
+            
+            self.num_players = 1;
+            self.onePlayerCheckbutton.select();
+            self.twoPlayerCheckbutton.deselect();
+            self.currentlyCheckedbutton = self.onePlayerCheckbutton;
+            
+            
+        
+        
+        pass
     
 
+    def twoPlayerCheck(self):
+        if(self.currentlyCheckedbutton != self.twoPlayerCheckbutton):
+            
+            self.num_players = 2;
+            self.twoPlayerCheckbutton.select();
+            self.onePlayerCheckbutton.deselect();
+            self.currentlyCheckedbutton = self.twoPlayerCheckbutton;
+        
+        pass
     
    
-    
+   
     
 
     def start_game_from_menu(self):
         """
         """
+        self.playerTurn = 'r';
+        self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red');
+        
         
         self.menuFrame.grid_forget();
         self.gameBoardFrame.grid(row =0, column = 0);
+        self.controller.clear_board();
+        self.controller.set_scores(0, 0)
+        self.update();
         
         pass
 
