@@ -57,6 +57,18 @@ class ConnectFourController():
         method.
         """
         # TODO does calculation
+        for col in self.model.available_moves():
+            if self.p1_three_in_row(col):
+                # place_piece(col);
+                return
+
+        # get self.last move
+        # randomly select from columns next to last move
 
         # calls place_piece()
         pass
+
+    def p1_three_in_row(self, col):
+        pass
+
+

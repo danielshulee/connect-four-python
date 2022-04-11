@@ -227,3 +227,9 @@ class ConnectFourModel():
         for ob in self.observers:
             ob.update()
         return
+
+    def available_moves(self):
+        """
+        Return [0,1,2,4,5,6]
+        """
+        return
