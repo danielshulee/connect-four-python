@@ -27,9 +27,9 @@ class ConnectFourController():
         """
         Places a piece given its color ('r' or 'b'), errors out otherwise )and column.
         Column zero is the leftmost column.
-        Returns r if red won or b if black won or NULL if neither player has won from the move.
+        Returns r if red won or b if black won or None if neither player has won from the move.
         """
-        return self.model.place_piece(col, color)
+        return self.model.place_piece(col, color, True)
 
     def get_scores(self):
         """
@@ -58,7 +58,8 @@ class ConnectFourController():
         """
         # TODO does calculation
         for col in self.model.available_moves():
-            if self.p1_three_in_row(col):
+            # Checks to see if red is about to win anywhere
+            if self.model.place_piece(col, 'r', False):
                 # place_piece(col);
                 return
 
@@ -67,8 +68,4 @@ class ConnectFourController():
 
         # calls place_piece()
         pass
-
-    def p1_three_in_row(self, col):
-        pass
-
 

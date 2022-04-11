@@ -10,8 +10,6 @@ from tkinter import Checkbutton
 from tkinter import Frame
 from tkinter import messagebox
 
-from asyncio.windows_events import NULL
-
 from controller import ConnectFourController
 from model import ConnectFourModel
 
@@ -149,7 +147,7 @@ class GameBoardView(tk.Frame):
         
         
         #passes the move to the controller
-        if(self.controller.place_piece(columnClicked, self.playerTurn) != NULL):
+        if(self.controller.place_piece(columnClicked, self.playerTurn) != None):
             messagebox.showinfo("Winner!", "A Player has won!")
             self.controller.clear_board();
             
