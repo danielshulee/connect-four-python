@@ -65,9 +65,13 @@ class ConnectFourController():
             has_won = self.place_piece(col, 'b')
             self.last_ai_move = col
             return has_won
+        # For every column, check if AI can win by placing piece
+        moves = self.model.available_moves()
+        for col in moves:
+            if self.model.place_piece(col, 'b', False):
+                return self.place_piece(col, 'b')
         # For every column, check if a move by the opponent would result in a victory
         # If so, play in that column
-        moves = self.model.available_moves()
         for col in moves:
             if self.model.place_piece(col, 'r', False):
                 has_won = self.place_piece(col, 'b')
