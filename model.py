@@ -56,9 +56,11 @@ class ConnectFourModel():
             board.append(["e"]*self.width)
         return board
 
-    def place_piece(self, col, color):
+    def place_piece(self, col, color, notify):
         """
         Places a piece given its color ('r' or 'b'), errors out otherwise )and column.
+        Notify should be true or false. If notify is true then the observer will be called
+        to update the view.
         Column zero is the leftmost column.
         Returns r if red won or b if black won or NULL if neither player has won from the move.
         """
@@ -75,15 +77,19 @@ class ConnectFourModel():
         
         # Winner has to be called before notify_observers, so that
         # score is updated before the observers are notified.
-        winner = self.has_won( row, col)
-        self.notify_observers()
+        winner = self.has_won(row, col)
+        if notify:
+            self.notify_observers()
+        else:
+            self.board[row][col] = 'e'
+
         return winner
 
     def has_won(self, row, col):
         """
         Checks if the piece placed at self.board[row][col] causes a player to win.
         If a player has won then the score is also updated.
-        Returns 'r' if red has won, 'b' if black has won, NULL otherwise.
+        Returns 'r' if red has won, 'b' if black has won, None otherwise.
         """
         piece = self.board[row][col]
         pieces_amt = 1
