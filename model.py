@@ -19,6 +19,7 @@ class ConnectFourModel():
         self.scores = [0,0]
         self.height = 6
         self.width = 7
+        self.moves_left = self.height*self.width
         self.current_winner = None
         self.clear_board()
         return
@@ -33,6 +34,8 @@ class ConnectFourModel():
         """
         Sets the board to an empty board
         """
+        self.current_winner = None
+        self.moves_left = self.height*self.width
         self.board = self.create_empty_board()
 
     def get_winner(self):
@@ -59,7 +62,6 @@ class ConnectFourModel():
         for red, and "e" for empty.
         """
         board = []
-        self.current_winner = None
         for i in range(self.height):
             board.append(["e"]*self.width)
         return board
@@ -80,6 +82,7 @@ class ConnectFourModel():
         for i in range(self.height-1, -1, -1):
             if (self.board[i][col] == 'e'):
                 self.board[i][col] = color
+                self.moves_left -= 1
                 row = i
                 break
         
@@ -89,6 +92,7 @@ class ConnectFourModel():
         if notify:
             self.notify_observers()
         else:
+            self.moves_left += 1
             self.board[row][col] = 'e'
 
         return winner
@@ -222,7 +226,11 @@ class ConnectFourModel():
                     self.current_winner = 'b'
                 return piece
         pieces_amt = 1
-                    
+        
+        if (self.moves_left <= 0):
+            self.current_winner = 't'
+            return None
+
         return None
 
     def get_scores(self):

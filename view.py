@@ -224,8 +224,14 @@ class GameBoardView(tk.Frame):
             messagebox.showinfo("Winner!", "Red Player has won!")
             self.controller.clear_board() 
         elif (winner == "b"):
-            messagebox.showinfo("Winner!", "Black Player has won!")
-            self.controller.clear_board() 
+            if (self.num_players == 2):
+                messagebox.showinfo("Winner!", "Black Player has won!")
+            else:
+                messagebox.showinfo("Loser!", "You Lost to the AI!")
+            self.controller.clear_board()
+        elif (winner == 't'):
+            messagebox.showinfo("Tie!", "Neither Player has won!")
+            self.controller.clear_board()
 
         pass
 
