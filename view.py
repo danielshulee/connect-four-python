@@ -16,10 +16,8 @@ from model import ConnectFourModel
 
 
 
-
 class GameBoardView(tk.Frame):
     
-   
     num_players = 2 
     
     playerTurn = 'r'
@@ -147,9 +145,7 @@ class GameBoardView(tk.Frame):
         
         
         #passes the move to the controller
-        if(self.controller.place_piece(columnClicked, self.playerTurn) != None):
-            messagebox.showinfo("Winner!", "A Player has won!")
-            self.controller.clear_board() 
+        self.controller.place_piece(columnClicked, self.playerTurn)
             
         if(self.num_players == 2):
         
@@ -162,8 +158,7 @@ class GameBoardView(tk.Frame):
                 self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red') 
         
         else:
-            if (self.controller.ai_move() != None):
-                messagebox.showinfo("LOLOL!", "The AI beat you!")
+            self.controller.ai_move()
         
         
         pass
@@ -224,6 +219,14 @@ class GameBoardView(tk.Frame):
         self.redScoreLabel.config(text = scores[0]) 
         self.blackScoreLabel.config(text = scores[1]) 
         
+        winner = self.controller.get_winner()
+        if (winner == "r"):
+            messagebox.showinfo("Winner!", "Red Player has won!")
+            self.controller.clear_board() 
+        elif (winner == "b"):
+            messagebox.showinfo("Winner!", "Black Player has won!")
+            self.controller.clear_board() 
+
         pass
 
     

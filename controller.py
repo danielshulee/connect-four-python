@@ -1,4 +1,4 @@
-import numpy
+import random
 
 class ConnectFourController():
     """
@@ -25,6 +25,12 @@ class ConnectFourController():
         Sets the board to an empty board
         """
         self.model.clear_board()
+
+    def get_winner(self):
+        """
+        Returns which player won. r for red and b for black. Otherwise returns None.
+        """
+        return self.model.get_winner()
 
     def place_piece(self, col, color):
         """
@@ -61,7 +67,7 @@ class ConnectFourController():
         """
         # If first AI move, randomly place piece
         if self.last_ai_move == None: 
-            col = numpy.random.randint(0,7)
+            col = random.randint(0,6)
             has_won = self.place_piece(col, 'b')
             self.last_ai_move = col
             return has_won
@@ -98,7 +104,7 @@ class ConnectFourController():
                 break
             rcol += 1
         # Choose from middle, left, and right columns
-        index = numpy.random.randint(0,high=len(next_moves))
+        index = random.randint(0, len(next_moves)-1)
         col = next_moves[index]
         has_won = self.place_piece(col,'b')
         self.last_ai_move = col

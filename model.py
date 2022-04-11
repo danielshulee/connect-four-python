@@ -19,6 +19,7 @@ class ConnectFourModel():
         self.scores = [0,0]
         self.height = 6
         self.width = 7
+        self.current_winner = None
         self.clear_board()
         return
 
@@ -33,6 +34,12 @@ class ConnectFourModel():
         Sets the board to an empty board
         """
         self.board = self.create_empty_board()
+
+    def get_winner(self):
+        """
+        Returns which player won. r for red and b for black. Otherwise returns None.
+        """
+        return self.current_winner
 
     def create_empty_board(self):
         """
@@ -52,6 +59,7 @@ class ConnectFourModel():
         for red, and "e" for empty.
         """
         board = []
+        self.current_winner = None
         for i in range(self.height):
             board.append(["e"]*self.width)
         return board
@@ -77,7 +85,7 @@ class ConnectFourModel():
         
         # Winner has to be called before notify_observers, so that
         # score is updated before the observers are notified.
-        winner = self.has_won(row, col)
+        winner = self.has_won(row, col, notify)
         if notify:
             self.notify_observers()
         else:
@@ -85,10 +93,11 @@ class ConnectFourModel():
 
         return winner
 
-    def has_won(self, row, col):
+    def has_won(self, row, col, notify):
         """
         Checks if the piece placed at self.board[row][col] causes a player to win.
-        If a player has won then the score is also updated.
+        If a player has won then the score and current winner is also updated if notify is True. If
+        notify is false neither score or current winner is updated.
         Returns 'r' if red has won, 'b' if black has won, None otherwise.
         """
         piece = self.board[row][col]
@@ -114,10 +123,13 @@ class ConnectFourModel():
             else:
                 break
         if (pieces_amt >= 4):
-            if piece == 'r':
-                self.scores[0] += 1
-            else:
-                self.scores[1] += 1
+            if notify:
+                if piece == 'r':
+                    self.scores[0] += 1
+                    self.current_winner = 'r'
+                else:
+                    self.scores[1] += 1
+                    self.current_winner = 'b'
             return piece
         pieces_amt = 1
 
@@ -141,10 +153,13 @@ class ConnectFourModel():
             else:
                 break
         if (pieces_amt >= 4):
-            if piece == 'r':
-                self.scores[0] += 1
-            else:
-                self.scores[1] += 1
+            if notify:
+                if piece == 'r':
+                    self.scores[0] += 1
+                    self.current_winner = 'r'
+                else:
+                    self.scores[1] += 1
+                    self.current_winner = 'b'
             return piece
         pieces_amt = 1
 
@@ -168,10 +183,13 @@ class ConnectFourModel():
             else:
                 break
         if (pieces_amt >= 4):
-            if piece == 'r':
-                self.scores[0] += 1
-            else:
-                self.scores[1] += 1
+            if notify:
+                if piece == 'r':
+                    self.scores[0] += 1
+                    self.current_winner = 'r'
+                else:
+                    self.scores[1] += 1
+                    self.current_winner = 'b'
             return piece
         pieces_amt = 1
 
@@ -195,11 +213,14 @@ class ConnectFourModel():
             else:
                 break
         if (pieces_amt >= 4):
-            if piece == 'r':
-                self.scores[0] += 1
-            else:
-                self.scores[1] += 1
-            return piece
+            if notify:
+                if piece == 'r':
+                    self.scores[0] += 1
+                    self.current_winner = 'r'
+                else:
+                    self.scores[1] += 1
+                    self.current_winner = 'b'
+                return piece
         pieces_amt = 1
                     
         return None
