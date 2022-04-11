@@ -1,4 +1,4 @@
-from random import randint
+import numpy
 
 class ConnectFourController():
     """
@@ -53,7 +53,6 @@ class ConnectFourController():
         """
         self.model.set_observer(observer)
 
-
     def ai_move(self):
         """
         Calls on an AI (black) to place a piece on the board. The AI will look at the
@@ -62,24 +61,24 @@ class ConnectFourController():
         """
         # If first AI move, randomly place piece
         if self.last_ai_move == None: 
-            col = randint(0,7)
-            self.place_piece(col, 'b')
+            col = numpy.random.randint(0,7)
+            has_won = self.place_piece(col, 'b')
             self.last_ai_move = col
-            return
+            return has_won
         # For every column, check if a move by the opponent would result in a victory
         # If so, play in that column
         moves = self.model.available_moves()
         for col in moves:
             if self.model.place_piece(col, 'r', False):
-                self.place_piece(col, 'b')
+                has_won = self.place_piece(col, 'b')
                 self.last_ai_move = col
-                return
+                return has_won
         # Otherwise, randomly choose between the column last played in, the column to its
         # left, and column to its right
         next_moves = []
         # Case 1: last column is not filled
         if self.last_ai_move in moves:
-            next_moves.append(moves)
+            next_moves.append(self.last_ai_move)
         # Find closest column to left that isn't full (adds nothing if every column to left is full)
         lcol = self.last_ai_move-1
         while lcol >= 0:
@@ -89,12 +88,15 @@ class ConnectFourController():
             lcol -= 1
         # Repeat for right side
         rcol = self.last_ai_move+1
-        while lcol < 7:
+        while rcol < 7:
             if rcol in moves:
                 next_moves.append(rcol)
                 break
             rcol += 1
         # Choose from middle, left, and right columns
-        self.place_piece(moves[randint(0,len(moves))],'b')
-        return
+        index = numpy.random.randint(0,high=len(next_moves))
+        col = next_moves[index]
+        has_won = self.place_piece(col,'b')
+        self.last_ai_move = col
+        return has_won
 
