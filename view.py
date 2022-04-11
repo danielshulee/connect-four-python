@@ -29,7 +29,7 @@ class GameBoardView(tk.Frame):
     root.title("Connect Four") 
     
     gameBoardFrame = Frame(root) 
-    gameBoardFrame.grid(row = 0, column = 0) 
+   # gameBoardFrame.grid(row = 0, column = 0) 
     
     
     gameFrame = Frame(gameBoardFrame) 
@@ -65,6 +65,8 @@ class GameBoardView(tk.Frame):
     
     
     menuFrame = Frame(root) 
+    menuFrame.grid(row = 0, column = 0);
+    
     menuLabel = Label(menuFrame, text = "Menu") 
     menuLabel.grid(row = 0, column = 0) 
     
