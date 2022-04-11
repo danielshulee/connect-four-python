@@ -224,7 +224,7 @@ class ConnectFourModel():
                 else:
                     self.scores[1] += 1
                     self.current_winner = 'b'
-                return piece
+            return piece
         pieces_amt = 1
         
         if (self.moves_left <= 0):
