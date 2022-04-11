@@ -37,6 +37,7 @@ class ConnectFourModel():
         self.current_winner = None
         self.moves_left = self.height*self.width
         self.board = self.create_empty_board()
+        self.notify_observers()
 
     def get_winner(self):
         """
