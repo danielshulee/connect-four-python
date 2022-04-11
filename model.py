@@ -234,6 +234,8 @@ class ConnectFourModel():
 
     def available_moves(self):
         """
-        Return [0,1,2,4,5,6]
+        Returns a list of the available columns that pieces can be placed in,
+        zero indexed. For example, if only the middl column has been completely
+        filled, this method returns [0,1,2,4,5,6].
         """
-        return
+        return [i for i in range(7) if self.board[0][i] == 'e'] 
