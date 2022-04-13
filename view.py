@@ -1,3 +1,4 @@
+from textwrap import fill
 import tkinter as tk
 from tkinter import *
 from tkinter import Tk
@@ -9,6 +10,10 @@ from tkinter import StringVar
 from tkinter import Checkbutton
 from tkinter import Frame
 from tkinter import messagebox
+from tkinter.ttk import Style
+from tkinter import PhotoImage
+
+from PIL import Image,ImageTk
 
 from controller import ConnectFourController
 from model import ConnectFourModel
@@ -21,8 +26,6 @@ class GameBoardView(tk.Frame):
     num_players = 2 
     
     playerTurn = 'r'
-    
-    
     controller = 0 
     
     root = Tk() 
@@ -35,10 +38,7 @@ class GameBoardView(tk.Frame):
     gameFrame = Frame(gameBoardFrame) 
     gameFrame.grid(row = 0, column = 0) 
     
-    
     gameCanvas = Canvas(gameFrame, bg = 'blue', width  =580, height = 500) 
-    
-    
     gameCanvas.grid(row = 0, column = 0) 
     
     scoreboardFrame = Frame(gameBoardFrame) 
@@ -49,7 +49,6 @@ class GameBoardView(tk.Frame):
     turnIndicatorLabel = Label(scoreboardFrame, text = "Red Player's\n Turn", fg = 'red', font = 'times 50', width = 10) 
     turnIndicatorLabel.grid(row = turnIndicatorRow, column = 0, columnspan = 2, ipadx = 50) 
     
-    
     scoreLabelsRow = 1 
     
     redScoreLabel = Label(scoreboardFrame, text = "0", fg = 'red', font = 'times 80') 
@@ -58,17 +57,21 @@ class GameBoardView(tk.Frame):
     blackScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'times 80') 
     blackScoreLabel.grid(row = scoreLabelsRow, column = 1) 
     
-    
-    
-    
-    
-    
-    
+    # Create menu
     menuFrame = Frame(root) 
-    menuFrame.grid(row = 0, column = 0);
+    menuFrame.grid(row = 0, column = 0)
     
-    menuLabel = Label(menuFrame, text = "Menu") 
-    menuLabel.grid(row = 0, column = 0) 
+    menuCanvas = Canvas(menuFrame, width=580, height = 500)
+    menuCanvas.pack()
+    
+    # Place background image in canvas
+    background = ImageTk.PhotoImage(Image.open("connect-4-25.png").resize((580,500)))
+    menuCanvas.create_image(0,0, anchor=NW, image=background)
+    menuCanvas.create_text(290, 100, text="Welcome to Connect Four!", font=("Helvetica 42 bold"), fill="blue")
+    menuCanvas.create_text(290,200, text="How many players?", font=("Helvetica 24 bold"))
+    
+    # menuLabel = Label(menuFrame, text = "Menu") 
+    # menuLabel.grid(row = 0, column = 0) 
     
     onePlayerCheckbutton = None 
     twoPlayerCheckbutton = None 
@@ -86,12 +89,7 @@ class GameBoardView(tk.Frame):
         self.controller = ConnectFourController(ConnectFourModel()) 
         self.controller.set_observer(self) 
         
-        
         self.gameCanvas.bind("<Button-1>", self.place_piece) 
-        
-        
-        
-        
         
         for x in range(7):
             for y in range(6):
@@ -100,26 +98,29 @@ class GameBoardView(tk.Frame):
                 
                 self.gameCanvas.create_oval(xCoord - self.circleSize,yCoord -self.circleSize, xCoord +self.circleSize, yCoord +self.circleSize, outline = "#000", fill = 'white', width = 2) 
         
-        
-        
-        
         returnToMenuButton = Button(self.scoreboardFrame, text = "Menu", font = 'times 40', command = self.quit_to_menu) 
         returnToMenuButton.grid(row = 2, column = 0, columnspan = 2) 
         
-        startNewGameButton = Button(self.menuFrame, text = "Start New Game", command = self.start_game_from_menu) 
-        startNewGameButton.grid(row = 3, column = 0) 
+        style = Style()
+        style.configure("start-button", font = ("Helvetica 12 bold"))
+        startNewGameButton = Button(self.menuFrame, text = "Start Game", height = 2, width=12, font=("Helvetica 20 bold"), command = self.start_game_from_menu) 
+        # startNewGameButton.grid(row = 3, column = 0) 
+        startNewGameButton.place(x=190,y=370)
         
-        self.onePlayerCheckbutton = Checkbutton(self.menuFrame, text = "1 Player", command = self.onePlayerCheck) 
-        self.onePlayerCheckbutton.grid(row = 1, column = 0) 
+
+        one_player_im = Image.open("1p.png").resize((30,60))
+        one_player_imtk = ImageTk.PhotoImage(one_player_im)
+        self.onePlayerCheckbutton = Checkbutton(self.menuFrame, image=one_player_imtk, command = self.onePlayerCheck) 
+        self.onePlayerCheckbutton.place(x=160,y=260)
         
-        self.twoPlayerCheckbutton = Checkbutton(self.menuFrame, text = "2 Player", command = self.twoPlayerCheck) 
-        self.twoPlayerCheckbutton.grid(row = 2, column = 0) 
+        two_player_im = Image.open("2p.png").resize((60,60))
+        two_player_imtk = ImageTk.PhotoImage(two_player_im)
+        self.twoPlayerCheckbutton = Checkbutton(self.menuFrame, image=two_player_imtk, command = self.twoPlayerCheck) 
+        self.twoPlayerCheckbutton.place(x = 320, y = 260) 
         
         self.twoPlayerCheckbutton.select() 
         
         self.root.mainloop() 
-        
-        pass
 
     def place_piece(self, event):
         """
