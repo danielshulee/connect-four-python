@@ -30,9 +30,12 @@ class GameBoardView(tk.Frame):
     
     root = Tk() 
     root.title("Connect Four") 
+  
     
+  
+    #gameboard
     gameBoardFrame = Frame(root) 
-   # gameBoardFrame.grid(row = 0, column = 0) 
+  
     
     
     gameFrame = Frame(gameBoardFrame) 
@@ -44,18 +47,31 @@ class GameBoardView(tk.Frame):
     scoreboardFrame = Frame(gameBoardFrame) 
     scoreboardFrame.grid(row =0, column = 1) 
     
+    
+    
+    
+    
+    
     turnIndicatorRow = 0 
     
     turnIndicatorLabel = Label(scoreboardFrame, text = "Red Player's\n Turn", fg = 'red', font = 'times 50', width = 10) 
     turnIndicatorLabel.grid(row = turnIndicatorRow, column = 0, columnspan = 2, ipadx = 50) 
     
-    scoreLabelsRow = 1 
+    
+    scoreLabel = Label(scoreboardFrame, text = "Score:", font = 'times 30');
+    scoreLabel.grid(row = 1, column = 0, columnspan = 2);
+    
+    
+    
+    scoreLabelsRow = 2 
     
     redScoreLabel = Label(scoreboardFrame, text = "0", fg = 'red', font = 'times 80') 
     redScoreLabel.grid(row = scoreLabelsRow, column = 0) 
     
     blackScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'times 80') 
     blackScoreLabel.grid(row = scoreLabelsRow, column = 1) 
+    
+    
     
     # Create menu
     menuFrame = Frame(root) 
@@ -67,7 +83,7 @@ class GameBoardView(tk.Frame):
     # Place background image in canvas
     background = ImageTk.PhotoImage(Image.open("connect-4-25.png").resize((580,500)))
     menuCanvas.create_image(0,0, anchor=NW, image=background)
-    menuCanvas.create_text(290, 100, text="Welcome to Connect Four!", font=("Helvetica 42 bold"), fill="blue")
+    menuCanvas.create_text(290, 100, text="Welcome to Connect Four!", font=("Helvetica 33 bold"), fill="blue")
     menuCanvas.create_text(290,200, text="How many players?", font=("Helvetica 24 bold"))
     
     # menuLabel = Label(menuFrame, text = "Menu") 
@@ -99,7 +115,7 @@ class GameBoardView(tk.Frame):
                 self.gameCanvas.create_oval(xCoord - self.circleSize,yCoord -self.circleSize, xCoord +self.circleSize, yCoord +self.circleSize, outline = "#000", fill = 'white', width = 2) 
         
         returnToMenuButton = Button(self.scoreboardFrame, text = "Menu", font = 'times 40', command = self.quit_to_menu) 
-        returnToMenuButton.grid(row = 2, column = 0, columnspan = 2) 
+        returnToMenuButton.grid(row = 3, column = 0, columnspan = 2) 
         
         style = Style()
         style.configure("start-button", font = ("Helvetica 12 bold"))
