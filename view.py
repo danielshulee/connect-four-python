@@ -112,7 +112,7 @@ class GameBoardView(tk.Frame):
         self.controller.set_observer(self) 
         
         self.gameCanvas.bind("<Button-1>", self.place_piece) 
-        self.music_on = True
+        self.sound_on = True
         
         for x in range(7):
             for y in range(6):
@@ -142,19 +142,28 @@ class GameBoardView(tk.Frame):
         self.twoPlayerCheckbutton.place(x = 320, y = 260) 
         
         self.twoPlayerCheckbutton.select() 
+
+        # Sound button
+        sound_im = Image.open("Sound_Symbol.png").resize((60,60))
+        sound_imtk = ImageTk.PhotoImage(sound_im)
+        self.soundButton = Checkbutton(self.menuFrame, image=sound_imtk, command = self.switch_sound_state)
+        self.soundButton.place(x = 0, y = 0)
+        self.soundButton.select()
         
         self.root.mainloop() 
 
-    def switch_music_state(self):
+    def switch_sound_state(self):
         """
         Callback function that switches music on if it is off. 
         Switches music off if it is on.
         """
-        if self.music_on == True:
+        if self.sound_on == True:
             # Case where music should turn off
             pygame.mixer.music.pause()
+            self.sound_on = False
         else:
             pygame.mixer.music.unpause()
+            self.sound_on = True
 
     def place_piece(self, event):
         """
@@ -179,8 +188,10 @@ class GameBoardView(tk.Frame):
         elif(self.controller.get_board()[0][columnClicked] != 'e'):
             return 
         
-        
-        pygame.mixer.Channel(0).play(pygame.mixer.Sound("Place_Piece.wav"), maxtime=433)
+        # Plays piece sound
+        if self.sound_on:
+            pygame.mixer.Channel(0).play(pygame.mixer.Sound("Place_Piece.wav"), maxtime=433)
+
         #passes the move to the controller
         self.controller.place_piece(columnClicked, self.playerTurn)
             
