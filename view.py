@@ -55,21 +55,21 @@ class GameBoardView(tk.Frame):
     
     turnIndicatorRow = 0 
     
-    turnIndicatorLabel = Label(scoreboardFrame, text = "Red Player's\n Turn", fg = 'red', font = 'times 50', width = 10) 
+    turnIndicatorLabel = Label(scoreboardFrame, text = "Red Player's\n Turn", fg = 'red', font = 'Helvetica 50', width = 10) 
     turnIndicatorLabel.grid(row = turnIndicatorRow, column = 0, columnspan = 2, ipadx = 50) 
     
     
-    scoreLabel = Label(scoreboardFrame, text = "Score:", font = 'times 30');
+    scoreLabel = Label(scoreboardFrame, text = "Score:", font = 'Helvetica 30');
     scoreLabel.grid(row = 1, column = 0, columnspan = 2);
     
     
     
     scoreLabelsRow = 2 
     
-    redScoreLabel = Label(scoreboardFrame, text = "0", fg = 'red', font = 'times 80') 
+    redScoreLabel = Label(scoreboardFrame, text = "0", fg = 'red', font = 'Helvetica 80') 
     redScoreLabel.grid(row = scoreLabelsRow, column = 0) 
     
-    blackScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'times 80') 
+    blackScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'Helvetica 80') 
     blackScoreLabel.grid(row = scoreLabelsRow, column = 1) 
     
     
@@ -121,7 +121,7 @@ class GameBoardView(tk.Frame):
                 
                 self.gameCanvas.create_oval(xCoord - self.circleSize,yCoord -self.circleSize, xCoord +self.circleSize, yCoord +self.circleSize, outline = "#000", fill = 'white', width = 2) 
         
-        returnToMenuButton = Button(self.scoreboardFrame, text = "Menu", font = 'times 40', command = self.quit_to_menu) 
+        returnToMenuButton = Button(self.scoreboardFrame, text = "Menu", font = 'Helvetica 40', command = self.quit_to_menu) 
         returnToMenuButton.grid(row = 3, column = 0, columnspan = 2) 
         
         style = Style()
