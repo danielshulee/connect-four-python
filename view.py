@@ -14,12 +14,13 @@ from tkinter.ttk import Style
 from tkinter import PhotoImage
 
 from PIL import Image,ImageTk
+import pygame
 
 from controller import ConnectFourController
 from model import ConnectFourModel
 
-
-
+pygame.init()
+pygame.mixer.init() # Initialize pygame which is used for sounds
 
 class GameBoardView(tk.Frame):
     
@@ -96,6 +97,11 @@ class GameBoardView(tk.Frame):
     
     circleSize = 30 
     
+    # Sets up the background music
+    pygame.mixer.music.load("Game-Menu_Looping.wav")
+    pygame.mixer.music.set_volume(.5) # Sets background music to half of the file's regular vol
+    pygame.mixer.Channel(0).set_volume(.3) # Sets channel used for sfx vol
+    pygame.mixer.music.play(-1) # Loops music indefinitely
     
     def __init__(self):
         
@@ -106,6 +112,7 @@ class GameBoardView(tk.Frame):
         self.controller.set_observer(self) 
         
         self.gameCanvas.bind("<Button-1>", self.place_piece) 
+        self.music_on = True
         
         for x in range(7):
             for y in range(6):
@@ -138,6 +145,17 @@ class GameBoardView(tk.Frame):
         
         self.root.mainloop() 
 
+    def switch_music_state(self):
+        """
+        Callback function that switches music on if it is off. 
+        Switches music off if it is on.
+        """
+        if self.music_on == True:
+            # Case where music should turn off
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
+
     def place_piece(self, event):
         """
         Callback function responsible for placing a piece.
@@ -162,23 +180,19 @@ class GameBoardView(tk.Frame):
             return 
         
         
-        
+        pygame.mixer.Channel(0).play(pygame.mixer.Sound("Place_Piece.wav"), maxtime=433)
         #passes the move to the controller
         self.controller.place_piece(columnClicked, self.playerTurn)
             
         if(self.num_players == 2):
-        
             if(self.playerTurn == 'r'):
                 self.playerTurn = 'b' 
-                self.turnIndicatorLabel.config( text = "Black Player's\n Turn", fg = 'black') 
-                
+                self.turnIndicatorLabel.config( text = "Black Player's\n Turn", fg = 'black')     
             elif(self.playerTurn == 'b'):
                 self.playerTurn = 'r' 
                 self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red') 
-        
         else:
             self.controller.ai_move()
-        
         
         pass
 
@@ -240,12 +254,15 @@ class GameBoardView(tk.Frame):
         
         winner = self.controller.get_winner()
         if (winner == "r"):
+            pygame.mixer.Channel(0).play(pygame.mixer.Sound("Win.wav"), maxtime=2300)
             messagebox.showinfo("Winner!", "Red Player has won!")
             self.controller.clear_board() 
         elif (winner == "b"):
             if (self.num_players == 2):
+                pygame.mixer.Channel(0).play(pygame.mixer.Sound("Win.wav"), maxtime=2300)
                 messagebox.showinfo("Winner!", "Black Player has won!")
             else:
+                pygame.mixer.Channel(0).play(pygame.mixer.Sound("Lose.wav"), maxtime=2300)
                 messagebox.showinfo("Loser!", "You Lost to the AI!")
             self.controller.clear_board()
         elif (winner == 't'):
