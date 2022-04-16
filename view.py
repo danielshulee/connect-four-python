@@ -144,7 +144,7 @@ class GameBoardView(tk.Frame):
         self.twoPlayerCheckbutton.select() 
 
         # Sound button
-        sound_im = Image.open("Sound_Symbol.png").resize((60,60))
+        sound_im = Image.open("Sound_Symbol.png").resize((30,30))
         sound_imtk = ImageTk.PhotoImage(sound_im)
         self.soundButton = Checkbutton(self.menuFrame, image=sound_imtk, command = self.switch_sound_state)
         self.soundButton.place(x = 0, y = 0)
