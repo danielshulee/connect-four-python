@@ -265,15 +265,18 @@ class GameBoardView(tk.Frame):
         
         winner = self.controller.get_winner()
         if (winner == "r"):
-            pygame.mixer.Channel(0).play(pygame.mixer.Sound("Win.wav"), maxtime=2300)
+            if self.sound_on == True:
+                pygame.mixer.Channel(0).play(pygame.mixer.Sound("Win.wav"), maxtime=2300)
             messagebox.showinfo("Winner!", "Red Player has won!")
             self.controller.clear_board() 
         elif (winner == "b"):
             if (self.num_players == 2):
-                pygame.mixer.Channel(0).play(pygame.mixer.Sound("Win.wav"), maxtime=2300)
+                if self.sound_on == True:
+                    pygame.mixer.Channel(0).play(pygame.mixer.Sound("Win.wav"), maxtime=2300)
                 messagebox.showinfo("Winner!", "Black Player has won!")
             else:
-                pygame.mixer.Channel(0).play(pygame.mixer.Sound("Lose.wav"), maxtime=2300)
+                if self.sound_on == True:
+                    pygame.mixer.Channel(0).play(pygame.mixer.Sound("Lose.wav"), maxtime=2300)
                 messagebox.showinfo("Loser!", "You Lost to the AI!")
             self.controller.clear_board()
         elif (winner == 't'):
