@@ -101,6 +101,7 @@ class GameBoardView(tk.Frame):
     pygame.mixer.music.load("Game-Menu_Looping.wav")
     pygame.mixer.music.set_volume(.5) # Sets background music to half of the file's regular vol
     pygame.mixer.Channel(0).set_volume(.3) # Sets channel used for sfx vol
+    pygame.mixer.Channel(1).set_volume(.5)
     pygame.mixer.music.play(-1) # Loops music indefinitely
     
     def __init__(self):
@@ -276,7 +277,7 @@ class GameBoardView(tk.Frame):
                 messagebox.showinfo("Winner!", "Black Player has won!")
             else:
                 if self.sound_on == True:
-                    pygame.mixer.Channel(0).play(pygame.mixer.Sound("Lose.wav"), maxtime=2300)
+                    pygame.mixer.Channel(1).play(pygame.mixer.Sound("Lose.wav"), maxtime=2300)
                 messagebox.showinfo("Loser!", "You Lost to the AI!")
             self.controller.clear_board()
         elif (winner == 't'):
