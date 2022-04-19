@@ -39,7 +39,7 @@ class GameBoardView(tk.Frame):
   
     
     
-    gameFrame = Frame(gameBoardFrame) 
+    gameFrame = Frame(gameBoardFrame)
     gameFrame.grid(row = 0, column = 0) 
     
     gameCanvas = Canvas(gameFrame, bg = 'blue', width  =580, height = 500) 
@@ -72,8 +72,6 @@ class GameBoardView(tk.Frame):
     blackScoreLabel = Label(scoreboardFrame, text = "0", fg = 'black', font = 'Helvetica 80') 
     blackScoreLabel.grid(row = scoreLabelsRow, column = 1) 
     
-    
-    
     # Create menu
     menuFrame = Frame(root) 
     menuFrame.grid(row = 0, column = 0)
@@ -86,9 +84,6 @@ class GameBoardView(tk.Frame):
     menuCanvas.create_image(0,0, anchor=NW, image=background)
     menuCanvas.create_text(290, 100, text="Welcome to Connect Four!", font=("Helvetica 33 bold"), fill="blue")
     menuCanvas.create_text(290,200, text="How many players?", font=("Helvetica 24 bold"))
-    
-    # menuLabel = Label(menuFrame, text = "Menu") 
-    # menuLabel.grid(row = 0, column = 0) 
     
     onePlayerCheckbutton = None 
     twoPlayerCheckbutton = None 
@@ -129,27 +124,30 @@ class GameBoardView(tk.Frame):
         style.configure("start-button", font = ("Helvetica 12 bold"))
         startNewGameButton = Button(self.menuFrame, text = "Start Game", height = 2, width=12, font=("Helvetica 20 bold"), command = self.start_game_from_menu) 
         # startNewGameButton.grid(row = 3, column = 0) 
-        startNewGameButton.place(x=190,y=370)
+        startNewGameButton.place(x=175,y=370)
         
 
         one_player_im = Image.open("1p.png").resize((30,60))
         one_player_imtk = ImageTk.PhotoImage(one_player_im)
-        self.onePlayerCheckbutton = Checkbutton(self.menuFrame, image=one_player_imtk, command = self.onePlayerCheck) 
+        self.onePlayerCheckbutton = Button(self.menuFrame, image=one_player_imtk, command = self.onePlayerCheck) 
         self.onePlayerCheckbutton.place(x=160,y=260)
         
         two_player_im = Image.open("2p.png").resize((60,60))
         two_player_imtk = ImageTk.PhotoImage(two_player_im)
-        self.twoPlayerCheckbutton = Checkbutton(self.menuFrame, image=two_player_imtk, command = self.twoPlayerCheck) 
+        self.twoPlayerCheckbutton = Button(self.menuFrame, image=two_player_imtk, command = self.twoPlayerCheck, background="green") 
         self.twoPlayerCheckbutton.place(x = 320, y = 260) 
-        
-        self.twoPlayerCheckbutton.select() 
 
-        # Sound button
+        self.currentlyCheckedbutton = self.twoPlayerCheckbutton
+
+        # Sound button on main menu
         sound_im = Image.open("Sound_Symbol.png").resize((30,30))
         sound_imtk = ImageTk.PhotoImage(sound_im)
-        self.soundButton = Checkbutton(self.menuFrame, image=sound_imtk, command = self.switch_sound_state)
-        self.soundButton.place(x = 0, y = 0)
-        self.soundButton.select()
+        soundButtonMain = Button(self.menuFrame, image=sound_imtk, command = self.switch_sound_state)
+        soundButtonMain.place(x = 0, y = 0)
+
+        # Sound button on gameboard view
+        soundButtonGame = Button(self.scoreboardFrame, image=sound_imtk, command = self.switch_sound_state)
+        soundButtonGame.place(x = 0, y = 0)
         
         self.root.mainloop() 
 
@@ -170,18 +168,9 @@ class GameBoardView(tk.Frame):
         """
         Callback function responsible for placing a piece.
         """
-        # user move results in place_piece() call
 
-        # set turn to black/red
-        
-        #if ai==true:
-        #   controller.ai_move()
-        
-        
         #gets the column the user clicked
         columnClicked = (event.x - 20)//80 
-        
-        
         
         #make sure column selection is valid
         if(columnClicked < 0 or columnClicked > 6):
@@ -208,18 +197,9 @@ class GameBoardView(tk.Frame):
         
         pass
 
-    def reset_score(self):
-        """
-        """
-        pass
-
-    def start_new_game(self):
-        """
-        """
-        pass
-
     def quit_to_menu(self):
         """
+        Goes back to the main menu.
         """
         self.gameBoardFrame.grid_forget() 
         self.menuFrame.grid(row =0, column = 0) 
@@ -228,7 +208,7 @@ class GameBoardView(tk.Frame):
 
     def update(self):
         """
-        
+        Updates the gameboard view with the new placed pieces and scoreboard.
         """
         
         #get the grid from the model
@@ -249,14 +229,11 @@ class GameBoardView(tk.Frame):
                 elif(color == 'b'):
                     color = 'black' 
                 
-                
-                
                 #create circle of said color
                 xCoord  = y* 80 + 50 
                 yCoord = x*80 + 50 
                 
                 self.gameCanvas.create_oval(xCoord - self.circleSize,yCoord -self.circleSize, xCoord +self.circleSize, yCoord +self.circleSize, outline = "#000", fill = color, width = 2) 
-                
         
         
         scores = self.controller.get_scores() 
@@ -283,33 +260,32 @@ class GameBoardView(tk.Frame):
         elif (winner == 't'):
             messagebox.showinfo("Tie!", "Neither Player has won!")
             self.controller.clear_board()
-
+        
         pass
 
     
   
     def onePlayerCheck(self):
-        
-        
+        """
+        Switches user to single player mode.
+        """
         if(self.currentlyCheckedbutton != self.onePlayerCheckbutton):
-            
             self.num_players = 1 
-            self.onePlayerCheckbutton.select() 
-            self.twoPlayerCheckbutton.deselect() 
+            self.onePlayerCheckbutton["background"] = "green"
+            self.twoPlayerCheckbutton["background"] = "white"
             self.currentlyCheckedbutton = self.onePlayerCheckbutton 
             
-            
-        
-        
         pass
     
 
     def twoPlayerCheck(self):
+        """
+        Switches the user to two player mode.
+        """
         if(self.currentlyCheckedbutton != self.twoPlayerCheckbutton):
-            
             self.num_players = 2 
-            self.twoPlayerCheckbutton.select() 
-            self.onePlayerCheckbutton.deselect() 
+            self.twoPlayerCheckbutton["background"] = "green"
+            self.onePlayerCheckbutton["background"] = "white"
             self.currentlyCheckedbutton = self.twoPlayerCheckbutton 
         
         pass
@@ -320,10 +296,10 @@ class GameBoardView(tk.Frame):
 
     def start_game_from_menu(self):
         """
+        Starts a new game.
         """
         self.playerTurn = 'r' 
         self.turnIndicatorLabel.config( text = "Red Player's\n Turn", fg = 'red') 
-        
         
         self.menuFrame.grid_forget() 
         self.gameBoardFrame.grid(row =0, column = 0) 
@@ -331,11 +307,6 @@ class GameBoardView(tk.Frame):
         self.controller.set_scores(0, 0)
         self.update() 
         
-        pass
-
-    def quit(self):
-        """
-        """
         pass
     
 gameboard = GameBoardView() 
