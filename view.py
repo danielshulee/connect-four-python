@@ -307,6 +307,4 @@ class GameBoardView(tk.Frame):
         self.controller.set_scores(0, 0)
         self.update() 
         
-        pass
-    
-gameboard = GameBoardView() 
+        pass 
